@@ -27,6 +27,11 @@ npplication create my-plugin
 
 # 使用别名
 npplication c my-plugin
+
+# 快速生成插件 ID
+npplication c -id
+# 或
+npplication create --id
 ```
 
 创建向导会提示输入以下信息：
@@ -224,6 +229,7 @@ NitaiPage 商店使用 JSON 格式存储数据：
 | 命令                          | 别名              | 说明           |
 | ----------------------------- | ----------------- | -------------- |
 | `npplication create <name>` | `npplication c` | 创建新插件项目 |
+| `npplication create --id`         | `npplication c -id` | 快速生成插件 ID |
 | `npplication dev --port <port>` | `npplication d` | 启动开发服务器 |
 | `npplication check`         | -                 | 验证插件元数据 |
 | `npplication build`         | `npplication b` | 构建插件       |

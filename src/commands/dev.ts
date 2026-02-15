@@ -1,7 +1,9 @@
-import { spawn } from 'child_process';
 import chalk from 'chalk';
 import path from 'path';
 import http from 'http';
+import https from 'https';
+import fs from 'fs';
+import { createSelfSignedCertificate } from '../utils/certificate';
 
 export async function devCommand(port?: number): Promise<void> {
   const serverPort = port || 11123;
@@ -15,13 +17,13 @@ export async function devCommand(port?: number): Promise<void> {
   }
 
   try {
-    const server = startHttpServer(serverPort);
+    const server = await startHttpServer(serverPort);
 
     console.log(chalk.green.bold('Server is running! \n'));
-    console.log(chalk.white('[INFO] 本地地址:'), chalk.cyan(`http://localhost:${serverPort}/`));
-    console.log(chalk.white('[INFO] 插件文件:'), chalk.cyan(`http://localhost:${serverPort}/${getPluginFileName()}`));
+    console.log(chalk.white('[INFO] 本地地址:'), chalk.cyan(`https://localhost:${serverPort}/`));
+    console.log(chalk.white('[INFO] 插件文件:'), chalk.cyan(`https://localhost:${serverPort}/${getPluginFileName()}`));
     console.log(chalk.yellow('\n[Tips] 在 NitaiPage 控制台执行以下命令安装插件：'));
-    console.log(chalk.cyan.bold(`installNpplication('http://localhost:${serverPort}/${getPluginFileName()}')\n`));
+    console.log(chalk.cyan.bold(`installNpplication('https://localhost:${serverPort}/${getPluginFileName()}')\n`));
     console.log(chalk.gray('Press Ctrl+C to stop\n'));
 
     process.on('SIGINT', () => {
@@ -35,14 +37,32 @@ export async function devCommand(port?: number): Promise<void> {
   }
 }
 
-function startHttpServer(port: number): http.Server {
-  const server = http.createServer((req, res) => {
-    const filePath = path.join(process.cwd(), req.url === '/' ? '' : req.url || '');
+async function startHttpServer(port: number): Promise<https.Server> {
+  const { cert, key } = await createSelfSignedCertificate();
+
+  const server = https.createServer({ cert, key }, (req, res) => {
+    let requestedPath = req.url === '/' ? '' : req.url || '';
+
+    if (requestedPath.startsWith('/')) {
+      requestedPath = requestedPath.substring(1);
+    }
+
+    const resolvedPath = path.resolve(process.cwd(), requestedPath);
+    const normalizedPath = path.normalize(resolvedPath);
 
     try {
-      const fs = require('fs');
-      if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
-        const ext = path.extname(filePath);
+      if (!normalizedPath.startsWith(process.cwd())) {
+        res.writeHead(403, {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+        });
+        res.end('Forbidden');
+        return;
+      }
+
+      if (fs.existsSync(normalizedPath) && fs.statSync(normalizedPath).isFile()) {
+        const ext = path.extname(normalizedPath);
         const contentType = getContentType(ext);
 
         res.writeHead(200, {
@@ -53,7 +73,7 @@ function startHttpServer(port: number): http.Server {
           'Access-Control-Allow-Credentials': 'true',
           'Access-Control-Max-Age': '86400'
         });
-        fs.createReadStream(filePath).pipe(res);
+        fs.createReadStream(normalizedPath).pipe(res);
       } else {
         res.writeHead(404, {
           'Access-Control-Allow-Origin': '*',
@@ -95,7 +115,7 @@ function isPortInUse(port: number): Promise<boolean> {
   return new Promise((resolve) => {
     const server = http.createServer();
 
-    server.once('error', (err: any) => {
+    server.once('error', (err: NodeJS.ErrnoException) => {
       if (err.code === 'EADDRINUSE') {
         resolve(true);
       } else {
@@ -113,7 +133,6 @@ function isPortInUse(port: number): Promise<boolean> {
 }
 
 function getPluginFileName(): string {
-  const fs = require('fs');
   const files = fs.readdirSync(process.cwd());
   const jsFiles = files.filter((f: string) => f.endsWith('.js') && !f.endsWith('-compressed.js'));
   return jsFiles[0] || 'plugin.js';

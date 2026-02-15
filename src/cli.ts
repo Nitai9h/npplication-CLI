@@ -19,8 +19,9 @@ program
 program
   .command('create [name]')
   .alias('c')
-  .description('创建新的 NPP 插件项目')
-  .action(createCommand);
+  .description('用于创建新的 NPP 插件项目 或 生成插件 ID')
+  .option('-id, --id', '生成插件 ID')
+  .action((name, options) => createCommand(name, options));
 
 program
   .command('dev')

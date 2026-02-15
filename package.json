@@ -1,10 +1,10 @@
 {
   "name": "nitaipage-npp-cli",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "CLI tool for creating and developing NitaiPage NPP plugins",
   "main": "dist/index.js",
   "bin": {
-    "npplication": "./dist/cli.js"
+    "npplication": "dist/cli.js"
   },
   "scripts": {
     "build": "tsc",
@@ -23,13 +23,14 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@exodus/bytes": "^1.14.1",
     "chalk": "^4.1.2",
-    "cnpm": "^9.4.0",
     "commander": "^11.1.0",
     "http-server": "^14.1.1",
     "inquirer": "^8.2.6",
     "minify": "^10.5.2",
     "ora": "^5.4.1",
+    "selfsigned": "^5.5.0",
     "terser": "^5.46.0"
   },
   "devDependencies": {
@@ -45,6 +46,9 @@
   },
   "engines": {
     "node": ">=14.0.0"
+  },
+  "overrides": {
+    "whatwg-encoding": "npm:@exodus/bytes@^1.14.1"
   },
   "files": [
     "dist",

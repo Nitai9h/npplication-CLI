@@ -4,8 +4,17 @@ import fs from 'fs';
 import path from 'path';
 import { CreatePluginOptions } from '../types';
 import { generateMetadata } from '../utils/metadataGenerator';
+import { generatePluginId } from '../utils/idGenerator';
 
-export async function createCommand(pluginName?: string): Promise<void> {
+export async function createCommand(pluginName?: string, cliOptions?: { id?: boolean }): Promise<void> {
+  if (cliOptions?.id) {
+    const id = generatePluginId();
+    console.log(chalk.cyan.bold('\nGenerated NID:\n'));
+    console.log(chalk.white(id));
+    console.log();
+    return;
+  }
+
   console.log(chalk.cyan.bold('\n🚀 Welcome to NitaiPage npplication creation wizard tool\n'));
 
   let options: CreatePluginOptions;
@@ -365,7 +374,7 @@ ${options.description || 'My first plugin'}
 在 NitaiPage 浏览器控制台执行 / Execute in console：
 
 \`\`\`javascript
-installNpplication('http://localhost:11123/${filename}')
+installNpplication('https://localhost:11123/${filename}')
 \`\`\`
 
 ## 开发 / Development
