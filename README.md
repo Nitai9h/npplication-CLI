@@ -12,7 +12,7 @@ NitaiPage NPP 插件开发的命令行工具，旨在帮助开发者快速创建
 ## 安装
 
 ```bash
-npm install -g nitaiPage-npp-cli
+npm install -g nitaipage-npp-cli
 ```
 
 ## 使用方法
