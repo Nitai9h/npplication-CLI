@@ -4,7 +4,7 @@ NitaiPage NPP 插件开发的命令行工具，旨在帮助开发者快速创建
 
 ## 功能特性
 
-- 🚀 快速创建插件文件
+- 🚀 快速创建插件文件或商店 JSON 文件
 - 🔧 集成本地开发服务器
 - 🔍 插件元数据验证
 - 📦 插件代码压缩
@@ -95,6 +95,15 @@ npplication b
 - 生成 `plugin-compressed.js` 文件
 - 自动验证构建结果
 
+### 创建商店 JSON 文件
+
+```bash
+npplication store
+
+# 使用别名
+npplication s
+```
+
 ## 插件元数据规范
 
 NPP 插件需要在文件开头包含元数据块：
@@ -138,6 +147,45 @@ NPP 插件需要在文件开头包含元数据块：
 - `@associations`: 关联项列表（格式：[`url`:`version`]）
 - `@translates`: 翻译语言代码（仅翻译插件必需，格式：zh-CN 或 [`url`:`version`]）
 
+## 商店数据格式规范
+
+NitaiPage 商店使用 JSON 格式存储数据：
+
+```json
+{
+  "category": [
+    {
+      "tools": "工具",
+      "style": "主题",
+      "translate": "翻译"
+    }
+  ],
+  "tools": [
+    {
+      "插件ID": {
+        "url": "插件文件 URL",
+        "screenshots": ["截图 URL1", "截图 URL2"]
+      }
+    }
+  ],
+  "style": [
+    {
+      "插件ID": {
+        "url": "插件文件 URL",
+        "screenshots": ["截图 URL"]
+      }
+    }
+  ],
+  "translate": [
+    {
+      "插件ID": {
+        "url": "插件文件 URL"
+      }
+    }
+  ]
+}
+```
+
 ## 开发工作流
 
 1. **创建项目**
@@ -179,6 +227,7 @@ NPP 插件需要在文件开头包含元数据块：
 | `npplication dev --port <port>` | `npplication d` | 启动开发服务器 |
 | `npplication check`         | -                 | 验证插件元数据 |
 | `npplication build`         | `npplication b` | 构建插件       |
+| `npplication store`         | `npplication s` | 创建商店 JSON 文件 |
 
 ## 常见问题 (Q&A)
 

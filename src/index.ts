@@ -6,3 +6,4 @@ export * from './commands/create';
 export * from './commands/dev';
 export * from './commands/check';
 export * from './commands/build';
+export * from './commands/store';

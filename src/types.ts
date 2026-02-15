@@ -36,3 +36,23 @@ export interface ValidationResult {
   errors: string[];
   warnings: string[];
 }
+
+export interface StoreCategory {
+  key: string;
+  name: string;
+}
+
+export interface StorePlugin {
+  id: string;
+  url: string;
+  screenshots?: string[];
+}
+
+export interface StoreData {
+  category: StoreCategory[];
+  plugins: Record<string, StorePlugin[]>;
+}
+
+export interface StoreWizardOptions {
+  outputFileName?: string;
+}

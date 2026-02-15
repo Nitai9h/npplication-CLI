@@ -6,6 +6,7 @@ import { createCommand } from './commands/create';
 import { devCommand } from './commands/dev';
 import { checkCommand } from './commands/check';
 import { buildCommand } from './commands/build';
+import { storeCommand } from './commands/store';
 
 const program = new Command();
 
@@ -40,6 +41,12 @@ program
   .description('构建插件（压缩代码）')
   .option('-f, --file <path>', '指定插件文件路径')
   .action((options) => buildCommand(options.file));
+
+program
+  .command('store')
+  .alias('s')
+  .description('创建商店 JSON 文件')
+  .action(storeCommand);
 
 program.parse(process.argv);
 
