@@ -1,6 +1,6 @@
 {
   "name": "nitaipage-npp-cli",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "CLI tool for creating and developing NitaiPage NPP plugins",
   "main": "dist/index.js",
   "bin": {
@@ -20,6 +20,10 @@
     "cli",
     "nitaiPage-plugin"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Nitai9h/npplication-CLI"
+  },
   "author": "",
   "license": "MIT",
   "dependencies": {
@@ -35,6 +39,7 @@
   },
   "devDependencies": {
     "@types/inquirer": "^9.0.7",
+    "@types/jest": "^30.0.0",
     "@types/minify": "^9.1.4",
     "@types/node": "^20.10.6",
     "@typescript-eslint/eslint-plugin": "^6.17.0",
