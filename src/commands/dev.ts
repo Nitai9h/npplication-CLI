@@ -51,7 +51,13 @@ async function startHttpServer(port: number): Promise<https.Server> {
     const normalizedPath = path.normalize(resolvedPath);
 
     try {
-      if (!normalizedPath.startsWith(process.cwd())) {
+      const normalizedCwd = path.normalize(process.cwd());
+      const normalizedPathLower = normalizedPath.toLowerCase();
+      const normalizedCwdLower = normalizedCwd.toLowerCase();
+
+      if (!normalizedPathLower.startsWith(normalizedCwdLower) ||
+        (normalizedPathLower !== normalizedCwdLower &&
+          normalizedPathLower.charAt(normalizedCwdLower.length) !== path.sep)) {
         res.writeHead(403, {
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
