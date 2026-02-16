@@ -221,8 +221,7 @@ function generatePluginContent(metadata: string, name: string, camelCaseName: st
 
   let settingCode = '';
   if (setting === 'true') {
-    if (type === 'coreNpp') {
-      settingCode = `
+    settingCode = `
     // 注册的设置页面
     document.addEventListener('pluginSettingsTemplateReady', function() {
         const pluginId = '${id}';
@@ -274,60 +273,6 @@ function generatePluginContent(metadata: string, name: string, camelCaseName: st
         }
     });
 `;
-    } else {
-      settingCode = `
-    // 注册的设置页面
-    (function() {
-        const pluginId = '${id}';
-        const mainConts = document.querySelector(\`[data-value="\${pluginId}"]\`);
-        
-        if (mainConts) {
-            const settingsContainer = document.createElement('div');
-            settingsContainer.className = 'plugin-settings';
-            settingsContainer.innerHTML = \`
-                <div class="setting-item">
-                    <label>示例设置项</label>
-                    <input type="text" id="\${pluginId}_exampleInput" placeholder="请输入值" />
-                </div>
-                <div class="setting-item">
-                    <label>开关示例</label>
-                    <input type="checkbox" id="\${pluginId}_toggleInput" />
-                </div>
-                <div class="setting-actions">
-                    <button id="\${pluginId}_saveBtn">保存</button>
-                </div>
-            \`;
-            
-            mainConts.appendChild(settingsContainer);
-            
-            // 绑定事件
-            \$(\`#\${pluginId}_saveBtn\`).on('click', function() {
-                const exampleValue = \$(\`#\${pluginId}_exampleInput\`).val();
-                const toggleValue = \$(\`#\${pluginId}_toggleInput\`).prop('checked');
-                
-                // 保存设置到插件存储
-                npp.set('exampleSetting', exampleValue);
-                npp.set('toggleSetting', toggleValue);
-                
-                alert('设置已保存！');
-            });
-            
-            // 加载已保存的设置
-            (async function() {
-                const savedExample = await npp.get('exampleSetting');
-                const savedToggle = await npp.get('toggleSetting');
-                
-                if (savedExample !== undefined) {
-                    \$(\`#\${pluginId}_exampleInput\`).val(savedExample);
-                }
-                if (savedToggle !== undefined) {
-                    \$(\`#\${pluginId}_toggleInput\`).prop('checked', savedToggle);
-                }
-            })();
-        }
-    })();
-`;
-    }
   }
 
   return `// ==Npplication==
