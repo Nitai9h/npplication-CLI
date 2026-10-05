@@ -1,8 +1,9 @@
 import fs from 'fs';
+import os from 'os';
 import path from 'path';
 import selfsigned from 'selfsigned';
 
-const CERT_DIR = path.join(process.cwd(), '.certs');
+const CERT_DIR = path.join(os.tmpdir(), 'npplication-certs');
 const CERT_PATH = path.join(CERT_DIR, 'cert.pem');
 const KEY_PATH = path.join(CERT_DIR, 'key.pem');
 

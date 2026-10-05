@@ -48,9 +48,17 @@ export interface StorePlugin {
   screenshots?: string[];
 }
 
+export type StorePluginMap = Record<string, StorePlugin[]>;
+
+// 商店里的单个插件项
+export interface StoreEntry {
+  url: string;
+  screenshots?: string[];
+}
+
 export interface StoreData {
-  category: StoreCategory[];
-  plugins: Record<string, StorePlugin[]>;
+  category: [Record<string, string>];
+  [categoryKey: string]: [Record<string, string>] | [Record<string, StoreEntry>];
 }
 
 export interface StoreWizardOptions {

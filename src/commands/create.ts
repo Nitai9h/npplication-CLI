@@ -319,7 +319,7 @@ ${options.description || 'My first plugin'}
 在 NitaiPage 浏览器控制台执行 / Execute in console：
 
 \`\`\`javascript
-installNpplication('https://localhost:11123/${filename}')
+installNpplication('https://localhost:11126/${filename}')
 \`\`\`
 
 ## 开发 / Development

@@ -2,11 +2,15 @@
 
 import { Command } from 'commander';
 import chalk from 'chalk';
+import fs from 'fs';
+import path from 'path';
 import { createCommand } from './commands/create';
 import { devCommand } from './commands/dev';
 import { checkCommand } from './commands/check';
 import { buildCommand } from './commands/build';
 import { storeCommand } from './commands/store';
+
+const packageJson = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'package.json'), 'utf-8'));
 
 const program = new Command();
 
@@ -14,7 +18,7 @@ program
   .name('npplication')
   .description('NitaiPage NPP 插件开发 CLI 工具')
   .description('CLI tool for creating and developing NitaiPage NPP plugins')
-  .version('1.0.0');
+  .version(packageJson.version);
 
 program
   .command('create [name]')
@@ -27,7 +31,7 @@ program
   .command('dev')
   .alias('d')
   .description('启动本地开发服务器')
-  .option('-p, --port <port>', '指定端口号', '11123')
+  .option('-p, --port <port>', '指定端口号', '11126')
   .action((options) => devCommand(parseInt(options.port)));
 
 program
@@ -47,7 +51,8 @@ program
   .command('store')
   .alias('s')
   .description('创建商店 JSON 文件')
-  .action(storeCommand);
+  .option('-o, --output <file>', '指定输出文件名', 'store.json')
+  .action((options) => storeCommand({ outputFileName: options.output }));
 
 program.parse(process.argv);
 

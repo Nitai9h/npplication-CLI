@@ -50,7 +50,7 @@ npplication create --id
 ### 启动开发服务器
 
 ```bash
-# 使用默认端口 11123
+# 使用默认端口 11126
 npplication dev
 
 # 指定端口
@@ -107,7 +107,21 @@ npplication store
 
 # 使用别名
 npplication s
+
+# 指定输出文件名（默认 store.json）
+npplication store -o my-store.json
 ```
+
+生成的 JSON 里 `category` 与每个分类都是**长度 1 的数组**，分类下的插件以插件 NID 为键：
+
+```json
+{
+  "category": [{ "tools": "工具" }],
+  "tools": [{ "1753629993099_c29f24d8-3308-4367-a961-dc53a92272ae": { "url": "https://example.com/timeSeconds.js" } }]
+}
+```
+
+写出文件前会按主程序的读取规则自检一遍，读不出插件或分类就会拒绝落盘并列出问题。
 
 ## 插件元数据规范
 
@@ -234,6 +248,22 @@ NitaiPage 商店使用 JSON 格式存储数据：
 | `npplication check`         | -                 | 验证插件元数据 |
 | `npplication build`         | `npplication b` | 构建插件       |
 | `npplication store`         | `npplication s` | 创建商店 JSON 文件 |
+
+## 编辑器补全
+
+装成开发依赖：
+
+```bash
+npm install -D nitaipage-npp-cli
+```
+
+加进编辑器配置
+
+```jsonc
+{
+    "include": ["*.js", "node_modules/nitaipage-npp-cli/types/npplication-env.d.ts"]
+}
+```
 
 ## 常见问题 (Q&A)
 

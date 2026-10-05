@@ -6,7 +6,7 @@ import fs from 'fs';
 import { createSelfSignedCertificate } from '../utils/certificate';
 
 export async function devCommand(port?: number): Promise<void> {
-  const serverPort = port || 11123;
+  const serverPort = port || 11126;
 
   console.log(chalk.cyan.bold('\n🔧 Start the local development server: \n'));
 

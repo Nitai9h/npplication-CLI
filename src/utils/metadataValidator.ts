@@ -13,6 +13,7 @@ export function validateMetadata(content: string): ValidationResult {
   }
 
   const isTranslatePlugin = metadata.type === 'translate';
+  const checksPluginId = metadata.type !== 'coreNpp' && !isTranslatePlugin;
 
   if (!metadata.name) {
     errors.push('缺少必需字段(Must)：@name');
@@ -20,21 +21,21 @@ export function validateMetadata(content: string): ValidationResult {
 
   if (!metadata.id) {
     errors.push('缺少必需字段(Must)：@id');
-  } else if (!isTranslatePlugin && !validatePluginId(metadata.id)) {
+  } else if (checksPluginId && !validatePluginId(metadata.id)) {
     errors.push('无效的 @id 格式：应为 13 位时间戳 + UUID v4');
   }
 
   if (!metadata.version) {
     errors.push('缺少必需字段(Must)：@version');
   } else if (!isValidVersion(metadata.version)) {
-    errors.push('无效的 @version 格式');
+    warnings.push(`@version 非建议的 X.Y.Z 形式，但若为纯数字则仍可使用：${metadata.version}`);
   }
 
   if (!isTranslatePlugin) {
     if (!metadata.time) {
-      warnings.push('未发现 @time，将使用默认值: body');
+      errors.push('缺少必需字段(Must)：@time（非翻译插件必填）');
     } else if (metadata.time !== 'head' && metadata.time !== 'body') {
-      errors.push('无效的 @time 值：应为 head 或 body');
+      warnings.push(`@time 值不是 head / body，nitaiPage 将按 body 处理：${metadata.time}`);
     }
   }
 
